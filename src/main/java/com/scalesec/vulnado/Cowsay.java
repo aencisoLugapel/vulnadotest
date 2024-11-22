@@ -1,12 +1,14 @@
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
+import org.apache.commons.text.StringEscapeUtils;
 import java.io.InputStreamReader;
+import org.springframework.web.util.HtmlUtils;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
+    String cmd = "/usr/games/cowsay '" + StringEscapeUtils.escapeXSI(input) + "'";
     System.out.println(cmd);
     processBuilder.command("bash", "-c", cmd);
 
@@ -18,7 +20,7 @@ public class Cowsay {
 
       String line;
       while ((line = reader.readLine()) != null) {
-        output.append(line + "\n");
+        output.append(HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(line))) + "\n");
       }
     } catch (Exception e) {
       e.printStackTrace();
